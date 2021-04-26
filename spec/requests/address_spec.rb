@@ -1,15 +1,20 @@
 require 'spec_helper'
 # require 'rest-client'
 
-feature 'External request' do
-  let(:full_address) { 'Julie-Wolfthorn-Straße 1, Berlin' }
+describe 'Addresses API', type: :request do
+  it 'should get a Stubbed request based on uri only and with the default response' do
+    full_address = 'Julie-Wolfthorn-Straße 1, Berlin'
 
-  it 'queries full address on Google Geocoding API' do
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{URI.encode(full_address)}&key=#{ENV['GOOGLE_API_SERVER_KEY']}"
 
-    response = Net::HTTP.get(url)
-
-    expect(response).to be_an_instance_of(String)
+    stub_request(:get, url).
+         with(
+           headers: {
+          'Accept'=>'*/*',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent'=>'Ruby'
+           }).
+         to_return(status: 200, body: "", headers: {})
   end
 end
 
